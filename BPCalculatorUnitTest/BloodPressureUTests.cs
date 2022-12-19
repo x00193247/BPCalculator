@@ -1,3 +1,5 @@
+using BPCalculator;
+
 namespace BPCalculatorUnitTest
 {
     public class BloodPressureUTests
@@ -8,9 +10,12 @@ namespace BPCalculatorUnitTest
         //}
 
         [Test]
-        public void Tests()
+        public void Test_HighBP()
         {
-            Assert.Pass();
+            BloodPressure bloodPressure = new BloodPressure()
+            { Systolic = 150, Diastolic = 95 };
+
+            Assert.AreEqual(BPCategory.High, bloodPressure.Category);
         }
     }
 }
