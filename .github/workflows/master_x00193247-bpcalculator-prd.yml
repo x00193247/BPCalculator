@@ -41,7 +41,7 @@ jobs:
       - name: dotnet test
         run: dotnet test
      
-  release:
+  upload:
     runs-on: windows-latest
     needs: test
 
@@ -68,7 +68,7 @@ jobs:
           
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: upload
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
