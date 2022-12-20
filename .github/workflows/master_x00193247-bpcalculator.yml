@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  buildTestRelease:
+  build:
     runs-on: windows-latest
 
     steps:
@@ -25,9 +25,38 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
+  test:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
       - name: dotnet test
         run: dotnet test
-        
+     
+  release:
+    runs-on: windows-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
@@ -36,10 +65,10 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
-
+		  
   deploy:
     runs-on: windows-latest
-    needs: buildTestRelease
+    needs: release
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
