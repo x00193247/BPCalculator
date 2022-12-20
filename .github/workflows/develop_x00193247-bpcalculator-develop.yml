@@ -6,12 +6,44 @@ name: Build and deploy ASP.Net Core app to Azure Web App - X00193247-BPCalculato
 on:
   push:
     branches:
-      - develop
+      - master
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+  test:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: dotnet test
+        run: dotnet test
+     
+  release:
+    runs-on: windows-latest
+    needs: test
 
     steps:
       - uses: actions/checkout@v2
