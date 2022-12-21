@@ -43,8 +43,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          dotnet tool install --global dotnet-coverage
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"x00193247_BPCalculator" /o:"x00193247" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet build --configuration Release
-          dotnet-coverage collect 'dotnet test' -f xml -o 'coverage.xml'
+          dotnet tool install --global JetBrains.dotCover.GlobalTool
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"x00193247_BPCalculator" /o:"x00193247" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  /d:sonar.cs.dotcover.reportsPaths="dotCover.Output.html"
+          dotnet build –no-incremental
+          dotnet dotcover test --dcReportType=HTML
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
