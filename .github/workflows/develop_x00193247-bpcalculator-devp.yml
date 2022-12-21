@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - X00193247-BPCalculator-develop
+name: Build and deploy ASP.Net Core app to Azure Web App - X00193247-BPCalculator-devp
 
 on:
   push:
@@ -12,6 +12,38 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+  test:
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+          include-prerelease: true
+
+      - name: dotnet test
+        run: dotnet test
+     
+  upload:
+    runs-on: windows-latest
+    needs: test
 
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +68,7 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: upload
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -51,7 +83,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'X00193247-BPCalculator-develop'
+          app-name: 'X00193247-BPCalculator-devp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7738D3736EDF4801AA9A872B13E0D110 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3B3B9A5C325D4C6FA4BAC8960100CC75 }}
           package: .
