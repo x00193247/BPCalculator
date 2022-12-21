@@ -4,6 +4,9 @@
 name: OWASP Dependency Checker       
   
 on:
+  push:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
