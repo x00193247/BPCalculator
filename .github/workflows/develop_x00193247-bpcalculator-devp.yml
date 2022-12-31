@@ -91,7 +91,7 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3B3B9A5C325D4C6FA4BAC8960100CC75 }}
           package: .
           
-    # Run Selenium tests      
+    # # Run Selenium tests      
      #   - name: Run Selenium tests
      #     run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp/SeleniumTest.dll /Settings:SeleniumTest.runsettings --logger:"trx;LogFileName=selenium.trx"
   
